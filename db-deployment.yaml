@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydb
+spec:
+  selector:
+    matchLabels:
+      app: mydb
+  template:
+    metadata:
+      labels:
+        app: mydb
+    spec:
+      containers:
+      - name: mydb
+        image: mysql:5.7
+        envFrom:
+          - secretRef:
+              name: mysql-secret
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+        - name: bookstore-storage
+          mountPath: /var/lib/mysql
+      volumes: 
+      - name: bookstore-storage
+        persistentVolumeClaim:
+          claimName: mypvc
