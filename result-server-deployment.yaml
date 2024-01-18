@@ -3,6 +3,7 @@ kind: Deployment
 metadata:
   name: result-server
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: result-server
@@ -11,12 +12,22 @@ spec:
       labels:
         app: result-server
     spec:
+      volumes:
+        - name: pv-storage
+          persistentVolumeClaim:
+            claimName: mypvc
       containers:
       - name: result-server
         image: abdullahyalcin/result-server
         resources:
           limits:
-            memory: "128Mi"
+            memory: "512Mi"
             cpu: "500m"
+          requests:
+            memory: "300Mi"
+            cpu: "250m"
         ports:
         - containerPort: 80
+        volumeMounts: 
+          - mountPath: /Users/abdullahyalcin/Desktop/github-projects/kubernetes-phonebook-project/pv-data
+            name: pv-storage

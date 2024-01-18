@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: web-service
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: web-service
@@ -12,12 +12,43 @@ spec:
       labels:
         app: web-service
     spec:
+      volumes:
+        - name: pv-storage
+          persistentVolumeClaim:
+            claimName: mypvc
       containers:
       - name: web-service
         image: abdullahyalcin/web-server
-        envFrom:
-          - secretRef:
-              name: secret
+        env:
+          - name: MYSQL_DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: web-secret
+                key: MYSQL_DATABASE
+          - name: MYSQL_USER
+            valueFrom:
+              secretKeyRef:
+                name: web-secret
+                key: MYSQL_USER
+          - name: MYSQL_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: web-secret
+                key: MYSQL_PASSWORD
+          - name: MYSQL_DATABASE_HOST
+            valueFrom:
+              secretKeyRef:
+                name: web-secret
+                key: MYSQL_DATABASE_HOST
         ports:
         - containerPort: 80
-        resources: {}
+        volumeMounts: 
+          - mountPath: /Users/abdullahyalcin/Desktop/github-projects/kubernetes-phonebook-project/pv-data
+            name: pv-storage
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "250Mi"
+            cpu: "80m"
