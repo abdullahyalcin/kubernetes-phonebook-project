@@ -1,33 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: result-server
+  labels:
+    app: resultserver-deploy
+  name: resultserver-deploy
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: result-server
+      app: resultserver-deploy
   template:
     metadata:
       labels:
-        app: result-server
+        app: resultserver-deploy
     spec:
-      volumes:
-        - name: pv-storage
-          persistentVolumeClaim:
-            claimName: mypvc
       containers:
-      - name: result-server
-        image: abdullahyalcin/result-server
-        resources:
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-          requests:
-            memory: "300Mi"
-            cpu: "250m"
+      - image: abdullahyalcin/resultserver
+        name: resultserver
         ports:
         - containerPort: 80
-        volumeMounts: 
-          - mountPath: /Users/abdullahyalcin/Desktop/github-projects/kubernetes-phonebook-project/pv-data
-            name: pv-storage
+        envFrom:
+        - configMapRef:
+            name: server-config
+        - secretRef:
+            name: mysql-secret
+        # env:
+        # - name: MYSQL_PASSWORD
+        #   value: Clarusway_1
+        # - name: MYSQL_USER
+        #   value: clarus
+        # - name: MYSQL_DATABASE
+        #   value: phonebook
+        # - name: MYSQL_DATABASE_HOST
+        #   value: mysql
+        resources: {}

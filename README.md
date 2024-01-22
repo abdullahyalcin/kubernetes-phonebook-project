@@ -4,6 +4,17 @@
 
 Phonebook Microservice Web Application aims to create a web application with MySQL Database using Docker and Kubernetes to give students the understanding of Microservice architecture. In this application, we have a frontend service and a backend service to interact with database service. Each service will be managed by a Kubernetes deployment. The backend service will be a gateway for the application and it will serve the necessary web pages for create, delete and update operations while the frontend service will serve a search page in order to conduct read operations. To preserve the data in the database, persistent volume and persistent volume claim concepts should be adopted.
 
+# Step 1: Create Docker Image
+## 1.1 Clone the Repository
+Clone the project repository to your local machine.
+
+## 2 Create Kubernetes YAML Files
+1.MySQL Setup (Persistent Volume (PV) , Persistent Volume Claim (PVC), MySQL Deployment, Service, Secret, and ConfigMap)
+
+2.Result Server Setup (Result Server Deployment, Service, and ConfigMap)
+
+3.Web Server Setup (Web Server Deployment, Service, and ConfigMap)
+
 ## Problem Statement
 
 ![Project_206](Microservice_structure.png) 
@@ -26,7 +37,7 @@ Phonebook Microservice Web Application aims to create a web application with MyS
 | `POST`    |   Create a new record | http://[ec2-hostname]:30001/add  |
 | `POST`    |   Update an existing record | http://[ec2-hostname]:30001/update  |
 | `POST`    |   Delete an existing record | http://[ec2-hostname]:30001/delete  |
-| `POST`    |   Delete a resource | http://[ec2-hostname]:30002  |
+| `POST`    |   Search a resource | http://[ec2-hostname]:30002  |
 
 - As a cloud engineer, you're requested to deploy the app on an AWS EC2 Instance using Docker and Kubernetes to showcase your project. In order to achieve this goal, you need to;
 
